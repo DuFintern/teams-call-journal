@@ -26,7 +26,7 @@
     {
       "entityId": "callJournalTab",
       "name": "Anruf-Journal",
-      "contentUrl": "https://github.com/DuFintern/teams-call-journal.git",
+      "contentUrl": "https://dufintern.github.io/teams-call-journal/public/index.html",
       "scopes": ["personal"]
     }
   ],
