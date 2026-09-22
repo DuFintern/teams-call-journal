@@ -1,0 +1,16 @@
+{
+  "name": "teams-call-journal",
+  "version": "1.0.0",
+  "description": "Automated Call Journal with Wrap-up Notes for Microsoft Teams",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@microsoft/teams-js": "^2.20.0",
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "json2csv": "^6.0.0-alpha.2",
+    "sqlite3": "^5.1.7"
+  }
+}

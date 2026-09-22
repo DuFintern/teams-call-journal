@@ -1,0 +1,35 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.16",
+  "version": "1.0.0",
+  "id": "a3d8f1e0-0000-0000-0000-calljournal01",
+  "developer": {
+    "name": "Eigene Firma",
+    "websiteUrl": "https://deine-domain.de",
+    "privacyUrl": "https://deine-domain.de/privacy",
+    "termsOfUseUrl": "https://deine-domain.de/terms"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "Anruf-Journal",
+    "full": "Automatisches Anruf-Journal und Notizen"
+  },
+  "description": {
+    "short": "Anruferfassung und Gesprächsnotizen für Teams Phone",
+    "full": "Erfasst automatisch ein- und ausgehende Telefonate und ermöglicht das direkte Verfassen von Wrap-up-Notizen."
+  },
+  "accentColor": "#5B5FC7",
+  "staticTabs": [
+    {
+      "entityId": "callJournalTab",
+      "name": "Anruf-Journal",
+      "contentUrl": "https://github.com/DuFintern/teams-call-journal.git",
+      "scopes": ["personal"]
+    }
+  ],
+  "permissions": ["identity"],
+  "validDomains": ["deine-domain.de"]
+}
