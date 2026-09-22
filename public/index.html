@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Anruf Journal</title>
+    <script src="https://res.cdn.office.net/teams-js/v2.20.0/js/MicrosoftTeams.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 15px; background: #fafafa; color: #333; }
+        h2 { font-size: 18px; margin-bottom: 15px; }
+        .call-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .call-card.pending { border-left: 4px solid #d9381e; }
+        .call-card.completed { border-left: 4px solid #107c41; }
+        .meta { font-size: 12px; color: #666; margin-bottom: 8px; }
+        textarea { width: 100%; height: 50px; border: 1px solid #ccc; border-radius: 4px; padding: 6px; box-sizing: border-box; font-family: inherit; }
+        button { background: #5b5fc7; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-top: 6px; font-weight: bold; }
+        button:hover { background: #4f52b2; }
+        .export-btn { background: #107c41; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <h2>Mein Anruf-Journal</h2>
+    <button class="export-btn" onclick="downloadCSV()">Zentralen CSV-Export herunterladen</button>
+
+    <div id="callList">Lade Anrufe...</div>
+
+    <script>
+        let currentUserEmail = "";
+
+        // Microsoft Teams SDK initialisieren
+        microsoftTeams.app.initialize().then(() => {
+            microsoftTeams.app.getContext().then((context) => {
+                currentUserEmail = context.user.userPrincipalName;
+                loadCalls();
+            });
+        }).catch(() => {
+            // Fallback für Tests außerhalb von Teams
+            currentUserEmail = "testuser@company.com";
+            loadCalls();
+        });
+
+        function loadCalls() {
+            fetch(`/api/calls?email=${encodeURIComponent(currentUserEmail)}`)
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById('callList');
+                    list.innerHTML = '';
+
+                    if (data.length === 0) {
+                        list.innerHTML = '<p>Keine aufgezeichneten Anrufe vorhanden.</p>';
+                        return;
+                    }
+
+                    data.forEach(call => {
+                        const card = document.createElement('div');
+                        card.className = `call-card ${call.status.toLowerCase()}`;
+                        card.innerHTML = `
+                            <div><strong>${call.direction === 'INBOUND' ? '📥 Eingehend' : '📤 Ausgehend'}</strong>: ${call.phoneNumber}</div>
+                            <div class="meta">Zeit: ${new Date(call.startTime).toLocaleString('de-DE')} | Dauer: ${call.durationSeconds} Sek.</div>
+                            <textarea id="note_${call.id}" placeholder="Gesprächsnotiz hier eingeben...">${call.note || ''}</textarea>
+                            <button onclick="saveNote('${call.id}')">Notiz speichern</button>
+                        `;
+                        list.appendChild(card);
+                    });
+                });
+        }
+
+        function saveNote(callId) {
+            const noteText = document.getElementById(`note_${callId}`).value;
+            fetch('/api/calls/note', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ callId, note: noteText })
+            }).then(() => alert('Notiz gespeichert!'));
+        }
+
+        function downloadCSV() {
+            window.location.href = '/api/export/csv';
+        }
+    </script>
+</body>
+</html>
