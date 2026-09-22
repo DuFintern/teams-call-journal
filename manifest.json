@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
   "manifestVersion": "1.16",
   "version": "1.0.0",
-  "id": "a3d8f1e0-0000-0000-0000-calljournal01",
+  "id": "a3d8f1e0-0000-0000-0000-123456789abc",
   "developer": {
     "name": "Eigene Firma",
     "websiteUrl": "https://deine-domain.de",
